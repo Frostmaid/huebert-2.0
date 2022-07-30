@@ -1,47 +1,37 @@
-import kotlinx.html.InputType
-import kotlinx.html.js.onChangeFunction
-import org.w3c.dom.HTMLInputElement
+import csstype.px
+import csstype.rgb
+import react.FC
 import react.Props
-import react.RBuilder
-import react.RComponent
-import react.State
-import react.dom.attrs
-import styled.css
-import styled.styledDiv
-import styled.styledInput
+import emotion.react.css
+import react.dom.html.InputType
+import react.dom.html.ReactHTML.div
+import react.dom.html.ReactHTML.input
+import react.useState
 
 external interface WelcomeProps : Props {
     var name: String
 }
 
-data class WelcomeState(val name: String) : State
-
-class Welcome(props: WelcomeProps) : RComponent<WelcomeProps, WelcomeState>(props) {
-
-    init {
-        state = WelcomeState(props.name)
-    }
-
-    override fun RBuilder.render() {
-        styledDiv {
-            css {
-                +WelcomeStyles.textContainer
-            }
-            +"Hello, ${state.name}"
+val Welcome = FC<WelcomeProps> { props ->
+    var name by useState(props.name)
+    div {
+        css {
+            padding = 5.px
+            backgroundColor = rgb(8, 97, 22)
+            color = rgb(56, 246, 137)
         }
-        styledInput {
-            css {
-                +WelcomeStyles.textInput
-            }
-            attrs {
-                type = InputType.text
-                value = state.name
-                onChangeFunction = { event ->
-                    setState(
-                        WelcomeState(name = (event.target as HTMLInputElement).value)
-                    )
-                }
-            }
+        +"Hello, $name"
+    }
+    input {
+        css {
+            marginTop = 5.px
+            marginBottom = 5.px
+            fontSize = 14.px
+        }
+        type = InputType.text
+        value = name
+        onChange = { event ->
+            name = event.target.value
         }
     }
 }
